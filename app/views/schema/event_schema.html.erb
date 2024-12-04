@@ -1,0 +1,14 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "<%= topic.title %>",
+  "startDate": "<%= topic.custom_fields['start_date'] %>",
+  "endDate": "<%= topic.custom_fields['end_date'] %>",
+  "location": {
+	"@type": "Place",
+	"name": "Event Venue",
+	"address": "Event Address"
+  }
+}
+</script>
