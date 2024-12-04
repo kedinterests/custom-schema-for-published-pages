@@ -1,16 +1,20 @@
-# name: schema-pages
-# about: Add custom schema markup to specific published pages
-# version: 0.2
-# authors: ChatGPT - prompted by: Chris Malone
-# url: https://github.com/yourname/schema-pages
+# frozen_string_literal: true
+
+# Plugin metadata
+# name: custom-schema-for-published-pages
+# about: Adds custom schema markup to specific published pages
+# version: 0.1
+# authors: Your Name
+# url: https://github.com/yourname/custom-schema-for-published-pages
 
 enabled_site_setting :schema_pages_enabled
 
 after_initialize do
-  # Register a custom field for schema type
+  # Register custom fields
+  register_topic_custom_field_type("is_published_page", :boolean)
   register_topic_custom_field_type("schema_type", :string)
 
-  # Add schema markup dynamically based on topic ID or schema_type field
+  # Add custom schema to TopicViewSerializer
   add_to_serializer(:topic_view, :schema_markup) do
 	next unless object.topic.custom_fields["is_published_page"]
 
@@ -22,15 +26,23 @@ after_initialize do
 				 "schema/faq_schema"
 			   when "Event"
 				 "schema/event_schema"
+			   when "Directory"
+				 "schema/directory_schema"
 			   else
 				 "schema/default_schema"
 			   end
 
+	# Render the appropriate schema template
 	render_template(template, topic: object.topic)
   end
 
-  # Add admin serializer to include schema_type field
-  add_to_class(:admin_serializers_topic_view_serializer, :schema_type) do
+  # Extend TopicViewSerializer to expose `schema_type` field for admin UI
+  add_to_serializer(:topic_view, :schema_type) do
 	object.topic.custom_fields["schema_type"]
+  end
+
+  # Extend TopicViewSerializer to expose `is_published_page` field for admin UI
+  add_to_serializer(:topic_view, :is_published_page) do
+	object.topic.custom_fields["is_published_page"]
   end
 end
