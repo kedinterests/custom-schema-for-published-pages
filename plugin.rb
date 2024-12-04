@@ -1,7 +1,7 @@
 # name: schema-pages
 # about: Add custom schema markup to specific published pages
 # version: 0.2
-# authors: Your Name
+# authors: ChatGPT - prompted by: Chris Malone
 # url: https://github.com/yourname/schema-pages
 
 enabled_site_setting :schema_pages_enabled
